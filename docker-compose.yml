@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: .
+    ports:
+      - "${PORT:-5001}:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT}
+    secrets:
+      - mongodb_uri
+      - jwt_secret
+    volumes:
+      - .:/usr/src/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:${5000}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+secrets:
+  mongodb_uri:
+    file: ./secrets/mongodb_uri.txt
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt

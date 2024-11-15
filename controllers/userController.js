@@ -2,6 +2,9 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const config = require("../config/config");
+
+const jwt_secret = config.jwt_secret;
 
 //@description Register a user
 //@route POST /api/users/register
@@ -46,13 +49,14 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
     //compare password with hashed password
     if (user && (await bcrypt.compare(password, user.password))) {
+        console.log(jwt_secret)
         const accessToken = jwt.sign({
             user: {
                 username: user.username,
                 email: user.email,
                 id: user.id
             }
-        }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+        }, process.env.ACCESS_TOKEN_SECRET || jwt_secret, { expiresIn: "15m" });
         res.status(200).json({ accessToken });
     } else {
         res.status(401);
