@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const config = require("../config/config");
 
-const jwt_secret = config.jwt_secret;
+const jwt_secret = config.jwt.secret;
 
 //@description Register a user
 //@route POST /api/users/register
@@ -49,7 +49,6 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
     //compare password with hashed password
     if (user && (await bcrypt.compare(password, user.password))) {
-        console.log(jwt_secret)
         const accessToken = jwt.sign({
             user: {
                 username: user.username,
