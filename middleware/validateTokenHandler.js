@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
-const jwt_secret = config.jwt_secret;
+const jwt_secret = config.jwt.secret;
 
 const validateToken = asyncHandler(async (req, res, next) => {
     let token;
