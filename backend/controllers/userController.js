@@ -56,7 +56,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 id: user.id
             }
         }, process.env.ACCESS_TOKEN_SECRET || jwt_secret, { expiresIn: "15m" });
-        res.status(200).json({ accessToken });
+        res.status(200).json({ user, accessToken });
     } else {
         res.status(401);
         throw new Error("Email or password is not valid");

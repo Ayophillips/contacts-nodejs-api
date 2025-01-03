@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacts-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: contacts-frontend
+  template:
+    metadata:
+      labels:
+        app: contacts-frontend
+    spec:
+      containers:
+        - name: contacts-frontend
+          image: ${ECR_REGISTRY}/contacts-frontend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REACT_APP_API_URL
+              value: "/api"
