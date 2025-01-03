@@ -16,10 +16,13 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await api.post('/users/login', formData);
-            dispatch(loginSuccess(response.data));
+            const token = response.data.accessToken;
+            const user = response.data.user;
+            dispatch(loginSuccess({ user, token }));
             navigate('/contacts');
         } catch (error) {
             console.error('Login failed:', error);
+            throw error;
         }
     };
 
@@ -34,6 +37,7 @@ const Login = () => {
                     onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                     }
+                    autoComplete="username"
                 />
                 <input
                     type="password"
@@ -42,6 +46,7 @@ const Login = () => {
                     onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
                     }
+                    autoComplete="current-password"
                 />
                 <button type="submit">Login</button>
             </form>
